@@ -1,0 +1,65 @@
+@page "/"
+@using GeneticAlgo.Models
+@using System.Globalization
+
+
+<div class="d-flex w-100 justify-content-evenly align-items-center mb-3">
+    <div class="d-flex align-items-center">
+        Room width:
+
+        <input type="number" min="1" @bind="@RoomWidth" style="height: 42px; width: 200px; margin-left: 0.5rem;">
+    </div>
+    <div class="d-flex align-items-center">
+        Room length:
+        <input type="number" min="1" @bind="@RoomLength" style="height: 42px; width: 200px; margin-left: 0.5rem;">
+
+    </div>
+    <div class="d-flex align-items-center">
+        Count of outlets:
+        <input type="number" min="1" @bind="@NumOfOutlets" style="height: 42px; width: 200px; margin-left: 0.5rem;">
+    </div>
+    <div class="d-flex align-items-center">
+        Min distance between outltes:
+        <input type="number" min="1" @bind="@MinDistance" style="height: 42px; width: 200px; margin-left: 0.5rem;">
+    </div>
+    <button style="height: 42px; width: 200px" @onclick="Run">Run</button>
+
+</div>
+<div class="board">
+
+    @for (var i = 0; i < RoomLength; i++)
+    {
+        var cellSize = Math.Min(100.0 / RoomWidth, 100.0 / RoomLength).ToString(CultureInfo.InvariantCulture);
+        <div class="d-flex maze-row w-100" style="height: @(cellSize)%">
+            @for (var j = 0; j < RoomWidth; j++)
+            {
+                var isWall = i == 0 || j == 0 || i == RoomLength - 1 || j == RoomWidth - 1;
+                var isOutlet = Result.Outlets.Any(e => e.X == j && e.Y == i);
+                var cellType = isOutlet ? "outlet" : isWall  ? "wall" : "";
+                <div class="cell @cellType h-100" style="width: @(cellSize)%"></div>
+            }
+        </div>
+    }
+</div>
+
+@code{
+
+    private OutletSolution Result { get; set; }
+    private int RoomWidth { get; set; } = 10;
+    private int RoomLength { get; set; } = 10;
+    private int NumOfOutlets { get; set; } = 5;
+    private int MinDistance { get; set; } = 2;
+
+    protected override void OnInitialized()
+    {
+        Run();
+    }
+
+    public void Run()
+    {
+        GeneticAlgorithm algorithm = new(RoomWidth, RoomLength, NumOfOutlets, MinDistance);
+        algorithm.Run();
+        Result = algorithm.BestSolution;
+    }
+
+}
