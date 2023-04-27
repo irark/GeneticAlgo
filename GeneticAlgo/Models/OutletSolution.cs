@@ -11,6 +11,10 @@ namespace GeneticAlgo.Models
         private int _minDistance;
         private double _fitness;
 
+        public OutletSolution()
+        {
+            Outlets = new List<Outlet>();
+        }
         public OutletSolution(List<Outlet> outlets, int roomWidth, int roomLength, int minDistance)
         {
             Outlets = outlets;

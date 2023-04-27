@@ -23,9 +23,22 @@ a, .btn-link {
 }
 
 .content {
-    height: 100vh;
+    height: 100vh;    
+    align-items: center;
+    display: flex;
+    flex-direction: column;
 }
-
+input,
+button{
+    border-radius: 10px;
+    border-width: 1px;
+    padding: 0.5rem;
+    border-color: rgba(173, 173, 173, 0.33);
+}
+button{
+    background: #26b050;
+    color: white;
+}
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
 }
